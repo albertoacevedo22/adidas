@@ -1,0 +1,111 @@
+swagger: '2.0'
+info:
+  description: This is the api for the public service
+  version: 1.0.0
+  title: Subscription API
+  # put the contact info for your development or API team
+  contact:
+    email: albertoacevedo@outlook.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /subscription/subscribed:
+     post:
+      summary: search if an user with an email exist
+      operationId: searchUserEmail
+      description: Search an user with the given email
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: email
+        description: Email to search
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+              example: some@email.com
+      responses:
+        200:
+          description: item created
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+        400:
+          description: bad input parameter
+        500:
+          description: internal server error
+        503:
+          description: service unavaliable due a component is down
+  /subscription:
+    put:
+      summary: adds a subscription item
+      operationId: addSubscription
+      description: Adds a subscription to the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: subscription
+        description: Subscription item to add
+        schema:
+          $ref: '#/definitions/Subscription'
+      responses:
+        200:
+          description: item created
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+        400:
+          description: bad input parameter
+        500:
+          description: internal server error
+        503:
+          description: service unavaliable due a component is down
+definitions:
+  Subscription:
+    type: object
+    required:
+    - email
+    - dateOfBirth
+    - consent
+    - NewsletterId
+    properties:
+      email:
+        type: string
+        format: email
+        example: example@example.com
+      dateOfBirth:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001Z
+      consent:
+        type: boolean
+      NewsletterId:
+        type: string
+        example: some-id
+      firtName:
+        type: string
+        example: some name
+      gender:
+        type: string
+        enum: [male, female]
+
+# Added by API Auto Mocking Plugin
+host: localhost:4005
+basePath: /
+schemes:
+ - http

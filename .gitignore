@@ -1,0 +1,10 @@
+.vscode/*
+logs/
+log.json*
+output.json*
+node_modules
+test/reports/*
+test/vendor/*
+localstack
+coverage
+.terraform

@@ -1,0 +1,230 @@
+swagger: '2.0'
+info:
+  description: This is the api for the internal subscription service
+  version: 1.0.0
+  title: Subscription API
+  # put the contact info for your development or API team
+  contact:
+    email: albertoacevedo@outlook.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /subscription/{id}:
+    get:
+      summary: searches a subscription
+      operationId: getSubscription
+      description: Find the subscription with the wanted id
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: id
+        description: id of the looking subscription
+        required: true
+        type: string
+        format: ObjectId
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+              subscription:
+                $ref: '#/definitions/Subscription'
+        400:
+          description: bad input parameter
+        500:
+          description: internal server error
+        503:
+          description: service unavaliable due a component is down
+    delete:
+      summary: delete a subscription
+      operationId: deleteSubscription
+      description: Deletes the subscription with the wanted id
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: id
+        description: id of the deleting subscription
+        required: true
+        type: string
+        format: ObjectId
+      responses:
+        200:
+          description: item deleted
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+        400:
+          description: bad input parameter
+        500:
+          description: internal server error
+        503:
+          description: service unavaliable due a component is down
+  /subscription/email:
+     post:
+      summary: search if an user with an email exist
+      operationId: searchUserEmail
+      description: Search an user with the given email
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: email
+        description: Email to search
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+              example: some@email.com
+      responses:
+        200:
+          description: item created
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+              subscription:
+                $ref: '#/definitions/Subscription'
+        400:
+          description: bad input parameter
+        500:
+          description: internal server error
+        503:
+          description: service unavaliable due a component is down
+  /subscription:
+    get:
+      summary: searches all subscription
+      operationId: getAllSubscriptions
+      description: Finds all the subscriptions
+      produces:
+      - application/json
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+              subscriptions:
+                type: array
+                items:
+                  $ref: '#/definitions/Subscription'
+        400:
+          description: bad input parameter
+        500:
+          description: internal server error
+        503:
+          description: service unavaliable due a component is down
+    put:
+      summary: adds a subscription item
+      operationId: addSubscription
+      description: Adds a subscription to the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: subscription
+        description: Subscription item to add
+        schema:
+          $ref: '#/definitions/SubscriptionForCreation'
+      responses:
+        200:
+          description: item created
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+              subscription:
+                $ref: '#/definitions/Subscription'
+        400:
+          description: bad input parameter
+        500:
+          description: internal server error
+        503:
+          description: service unavaliable due a component is down
+definitions:
+  SubscriptionForCreation:
+    type: object
+    required:
+    - email
+    - dateOfBirth
+    - consent
+    - NewsletterId
+    properties:
+      email:
+        type: string
+        format: email
+        example: example@example.com
+      dateOfBirth:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001Z
+      consent:
+        type: boolean
+      NewsletterId:
+        type: string
+        example: some-id
+      firtName:
+        type: string
+        example: some name
+      gender:
+        type: string
+        enum: [male, female]
+  Subscription:
+    type: object
+    properties:
+      ID:
+        type: string
+        format: ObjectId
+        example: 60cb3e2931c8350013a2a3bd
+      email:
+        type: string
+        format: email
+        example: example@example.com
+      dateOfBirth:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001Z
+      consent:
+        type: boolean
+      NewsletterId:
+        type: string
+        example: some-id
+      firtName:
+        type: string
+        example: some name
+      gender:
+        type: string
+        enum: [male, female]
+      created_at:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001Z
+      updated_t:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001Z
+
+# Added by API Auto Mocking Plugin
+host: localhost:3000
+basePath: /
+schemes:
+ - http
